@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>792</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>My Closet</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>489</y>
+      <width>771</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="lower_layout">
+     <item>
+      <layout class="QHBoxLayout" name="lower_layout_2">
+       <item>
+        <widget class="QPushButton" name="favorite_button">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI Light</family>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Favorites</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="add_item_button">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI Light</family>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Add Item</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="go_to_cart_button">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI Light</family>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Go To Cart</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>70</y>
+      <width>712</width>
+      <height>301</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QPushButton" name="tops_button">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI Light</family>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Tops</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pants_button">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI Light</family>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Pants</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="skirts_button">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI Light</family>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Skirts</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="accessories_button">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI Light</family>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Accessories</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="dresses_button">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI Light</family>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Dresses</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="shoes_button">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI Light</family>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Shoes</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>792</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="add_bar_2">
+    <property name="title">
+     <string>Add...</string>
+    </property>
+    <addaction name="new_item_bar"/>
+    <addaction name="new_favorite_look_bar"/>
+   </widget>
+   <widget class="QMenu" name="go_to_bar">
+    <property name="title">
+     <string>Go To...</string>
+    </property>
+    <addaction name="favorites_bar"/>
+    <addaction name="cart_bar"/>
+   </widget>
+   <addaction name="add_bar_2"/>
+   <addaction name="go_to_bar"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="add_item_bar">
+   <property name="text">
+    <string>Item</string>
+   </property>
+  </action>
+  <action name="add_favorite_look_bar">
+   <property name="text">
+    <string>Favorite Look</string>
+   </property>
+  </action>
+  <action name="actionFavorites">
+   <property name="text">
+    <string>Favorites</string>
+   </property>
+  </action>
+  <action name="actionCart">
+   <property name="text">
+    <string>Cart</string>
+   </property>
+  </action>
+  <action name="favorites_bar">
+   <property name="text">
+    <string>Favorites</string>
+   </property>
+  </action>
+  <action name="cart_bar">
+   <property name="text">
+    <string>Cart</string>
+   </property>
+  </action>
+  <action name="new_item_bar">
+   <property name="text">
+    <string>New Item</string>
+   </property>
+  </action>
+  <action name="new_favorite_look_bar">
+   <property name="text">
+    <string>New Favorite Look</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
