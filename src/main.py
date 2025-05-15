@@ -1,7 +1,8 @@
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QWidget, QVBoxLayout, QStackedWidget
-from main_ui import Ui_MainWindow
+from home_ui import Ui_MainWindow
 from items_template_ui import Ui_ItemsTemplateWindow 
 from add_item_ui import Ui_AddItem
+from item_added_ui import Ui_ItemAddedWindow
 import sqlite3
 import sys
 
@@ -31,28 +32,38 @@ class MainPage(QMainWindow, Ui_MainWindow):
 
 class ItemTemplatePage(QMainWindow, Ui_ItemsTemplateWindow):
     """ template page for pages 1-6 """
-    def __init__(self, new_title: str, stacked_widget):
+    def __init__(self, page_name: str, stacked_widget):
         super().__init__()
         self.setupUi(self)
         self.stacked_widget = stacked_widget
+        self.page_name = page_name.lower()
 
-        # change lable text by page name
-        self.page_title.setText(new_title)
+        # dynamic page load
+        self.page_title.setText(page_name)  # set lable by page name
+        # TODO: add images - show_all_item_images()
 
         # action for buttons
         self.main_page_button.clicked.connect(self.go_to_main_menu)
+        self.show_all_item_images()
 
     def go_to_main_menu(self):
         # go to main page (number 0)
         self.stacked_widget.setCurrentIndex(0)
 
-    def show_all_item_images(self):
-        # shows all images of that item
-        pass
+    def show_all_item_images(self):     # <------------------------------------------------------- Come back gere !!
+        items_table = ItemsTable()
+        items_table.cursor.execute("SELECT image_path FROM items WHERE category=:page_category", {'page_category': self.page_name})
+        result = items_table.cursor.fetchall()
+        paths_list = []
+        for row in result:
+            paths_list.append(row[0])
+
+        # DEBUG:
+        print(f" DEBUG: {paths_list}")
 
 
 
-class AddItem(QMainWindow, Ui_AddItem):
+class AddItemPage(QMainWindow, Ui_AddItem):
     """ Add item page - page 7 """
     def __init__(self, stacked_widget):
         super().__init__()
@@ -61,27 +72,46 @@ class AddItem(QMainWindow, Ui_AddItem):
 
         # action for buttons
         self.cancel_button.clicked.connect(self.go_to_main_menu)
-        self.submit_button.clicked.connect(self.add_item_to_db)
+        self.submit_button.clicked.connect(self.add_item_to_table)
 
     def go_to_main_menu(self):
         # go to main page (number 0)
         self.stacked_widget.setCurrentIndex(0)
 
-    def add_item_to_db(self):
+    def add_item_to_table(self):
         # collect data from user input
-        image_path = '-'    # CHANGE IT
-        item_id = 0         # CHANGE IT
-        name = self.name_input.text()
-        color = self.color_input.text()
-        size = self.size_input.text()
-        price = self.price_input.text()
-        shop =self.shop_input.text()
-        category = '-'      # CHANGE IT
-        hashtags =self.hashtag_input.text()
+        item_dict = {
+            'image_path': '/home/image', 'item_id': 0,
+            'name': self.name_input.text(), 'color': self.color_input.text(), 'size': self.size_input.text(), 
+            'price': self.price_input.text(), 'shop': self.shop_input.text(), 'category': 'shoes', 
+            'hashtags': self.hashtag_input.text()
+            }
 
         # create item object and sent into DB
-        item = ItemsTable(image_path=image_path, item_id=item_id, name=name, color=color, size=size, price=price, shop=shop, category=category, hashtags=hashtags)
-        item.insert_item_to_table()
+        item = ItemsTable()
+        item.insert_item_to_table(item_dict)
+        self.item_added_menu()
+    
+    def item_added_menu(self):
+        # item added sucessfuly menu
+        self.stacked_widget.setCurrentIndex(8)
+
+
+
+class ItemAddedPage(QMainWindow, Ui_ItemAddedWindow):
+    """ opens when item is added to "items" table - page 8 """
+    def __init__(self, stacked_widget):
+        super().__init__()
+        self.setupUi(self)
+        self.stacked_widget = stacked_widget
+
+        # action for buttons
+        self.main_page_button.clicked.connect(self.go_to_main_menu)
+        
+    def go_to_main_menu(self):
+        # go to main page (number 0)
+        self.stacked_widget.setCurrentIndex(0)
+
 
 
 
@@ -101,23 +131,12 @@ class SQLiteTables():
 
 class ItemsTable(SQLiteTables):
     """ all items table """
-    def __init__(self, image_path="-", item_id=0, name="-", color="-", size="-", price="-", shop="-", category="-", hashtags="-"):
+    def __init__(self):
         super().__init__(table_name='all_items')
-        self.image_path = image_path
-        self.item_id = item_id
-        self.name = name
-        self.color = color
-        self.size = size
-        self.price = price
-        self.shop = shop
-        self.category = category
-        self.hashtags = hashtags
-    
-    def __str__(self):
-        return 
 
     def create_table(self):
         # creates table
+        # ADD: check if table exists
         with self.connection:
             self.cursor.execute("""CREATE TABLE items (
                     image_path,
@@ -131,24 +150,12 @@ class ItemsTable(SQLiteTables):
                     hashtags text
                     )""")
     
-    def insert_item_to_table(self):
+    def insert_item_to_table(self, item_dict):
         # inserts object data into table
-        self.create_table()
-        item_dict = {
-            'image_path': self.image_path, 'item_id': self.item_id ,
-            'name': self.name, 'color': self.color, 'size': self.size, 
-            'price': self.price, 'shop': self.shop, 'category': self.category, 
-            'hashtags': self.hashtags
-            }
+        # self.create_table()
         with self.connection:
             self.cursor.execute("INSERT INTO items VALUES (:image_path, :item_id, :name, :color, :size, :price, :shop, :category, :hashtags)", item_dict)
-        
-        # DEBUG: print insertion
-        self.cursor.execute("SELECT * FROM items WHERE name=:find_name", {'find_name': self.name})
-        print(self.cursor.fetchone())
 
-
-        
 
 
 if __name__ == '__main__':
@@ -159,13 +166,14 @@ if __name__ == '__main__':
 
     # creating objects of all pages
     main_page = MainPage(stacked_widget)
-    tops_page = ItemTemplatePage(new_title="Tops", stacked_widget=stacked_widget)
-    pants_page = ItemTemplatePage(new_title="Pants", stacked_widget=stacked_widget)
-    skirts_page = ItemTemplatePage(new_title="Skirts", stacked_widget=stacked_widget)
-    dresses_page = ItemTemplatePage(new_title="Dresses", stacked_widget=stacked_widget)
-    accessories_page = ItemTemplatePage(new_title="Accessories", stacked_widget=stacked_widget)
-    shoes_page = ItemTemplatePage(new_title="Shoes", stacked_widget=stacked_widget)
-    add_item_page = AddItem(stacked_widget)
+    tops_page = ItemTemplatePage(page_name="Tops", stacked_widget=stacked_widget)
+    pants_page = ItemTemplatePage(page_name="Pants", stacked_widget=stacked_widget)
+    skirts_page = ItemTemplatePage(page_name="Skirts", stacked_widget=stacked_widget)
+    dresses_page = ItemTemplatePage(page_name="Dresses", stacked_widget=stacked_widget)
+    accessories_page = ItemTemplatePage(page_name="Accessories", stacked_widget=stacked_widget)
+    shoes_page = ItemTemplatePage(page_name="Shoes", stacked_widget=stacked_widget)
+    add_item_page = AddItemPage(stacked_widget)
+    item_added = ItemAddedPage(stacked_widget)
 
     # adding all pages into stacked_widget 0-10
     stacked_widget.addWidget(main_page)
@@ -176,6 +184,7 @@ if __name__ == '__main__':
     stacked_widget.addWidget(accessories_page)
     stacked_widget.addWidget(shoes_page)
     stacked_widget.addWidget(add_item_page)
+    stacked_widget.addWidget(item_added)
 
     stacked_widget.setFixedSize(800, 600)
     stacked_widget.show()
