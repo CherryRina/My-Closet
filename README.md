@@ -16,7 +16,8 @@ python3.11 -m venv venv
 ```
 4. Activate the environment (use it every time you want to start working in this project)
 ```bash
-venv\Scripts\activate
+venv\Scripts\activate # for Windows
+source venv/bin/activate # for Linux
 ```
 5. Upgrade pip
 ```bash
