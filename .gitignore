@@ -9,3 +9,12 @@ __pycache__/
 
 # Ignore database files
 *.db
+
+# ignore env files
+.env
+
+# Ignore pictures (from resources)
+*.png
+*.jpg
+*.jpeg
+*.jfif
